@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Proyecto: SnackBoom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Nica Sunrise -->
+    <!-- Application Structure Plan: He diseñado la aplicación como un panel de control de una sola página en lugar de una presentación lineal para ofrecer una experiencia más moderna e interactiva. La estructura es temática: (1) Una sección de bienvenida que resume el problema y la solución. (2) Una sección central dividida en 'Producto' y 'Mercado' para detallar los pilares del proyecto. (3) Una sección de 'Análisis del Equipo' con visualizaciones de datos interactivas para destacar la colaboración, que es el único dato cuantitativo del informe. (4) Un cierre con un llamado a la acción claro. Esta arquitectura permite al usuario captar rápidamente la esencia del proyecto y profundizar en las áreas de interés, haciendo que la exploración de la información sea más intuitiva y eficiente que pasar diapositivas. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Tabla de contribuciones por tiempo. -> Goal: Comparar el esfuerzo del equipo. -> Viz/Presentation: Un gráfico de barras (Chart.js) para comparar el total de minutos por integrante y un gráfico de dona (Chart.js) para mostrar la distribución del tiempo por tarea. -> Interaction: Tooltips en hover que muestran los minutos exactos. -> Justification: Los gráficos permiten una comprensión instantánea de la distribución del trabajo, lo cual es más impactante que una tabla estática. -> Library/Method: Chart.js/Canvas.
+        - Report Info: Pasos de producción. -> Goal: Organizar y mostrar un proceso. -> Viz/Presentation: Diagrama de flujo horizontal creado con HTML y Tailwind CSS. -> Interaction: Ninguna. -> Justification: Un diagrama visual es más fácil de seguir y más atractivo que una lista numerada para representar un proceso secuencial. -> Library/Method: HTML/Tailwind.
+        - Report Info: Marketing en redes sociales. -> Goal: Informar. -> Viz/Presentation: Tarjetas con texto e iconos (caracteres unicode). -> Interaction: Ninguna. -> Justification: Los iconos refuerzan visualmente la información de texto de manera concisa. -> Library/Method: HTML/Tailwind/Unicode.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .burst-effect {
+            font-weight: 900;
+            font-size: 5rem;
+            position: relative;
+            color: #D97706; /* amber-600 */
+            text-shadow: 2px 2px 0 #FBBF24, 4px 4px 0 #F59E0B; /* amber-300, amber-500 */
+            animation: burst 1.5s ease-out infinite alternate;
+        }
+        @keyframes burst {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-amber-900">
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="burst-effect">SnackBoom</h1>
+            <p class="text-xl md:text-2xl font-bold mt-2 text-amber-700">Snacks Caseros con Sabor Nica</p>
+            <p class="text-md text-amber-600">Un Proyecto Escolar de Javier, Brandon y Chele Piña</p>
+        </header>
+
+        <section id="resumen" class="mb-12 md:mb-16">
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white/60 p-6 rounded-2xl shadow-lg border border-amber-200">
+                    <h2 class="text-2xl font-bold text-red-600 mb-3">El Problema 😟</h2>
+                    <p class="text-lg">Los snacks comerciales disponibles en la escuela son caros y, a menudo, no representan los sabores auténticos que nos gustan a nivel local.</p>
+                </div>
+                <div class="bg-amber-400 p-6 rounded-2xl shadow-2xl text-white">
+                    <h2 class="text-2xl font-bold text-amber-900 mb-3">Nuestra Solución 😃</h2>
+                    <p class="text-lg font-semibold">Creamos SnackBoom: chips de plátano y papa con deliciosos sabores nicaragüenses, a un precio justo y ¡hechos por y para estudiantes!</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="proyecto" class="mb-12 md:mb-16 bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-amber-200">
+            <h2 class="text-3xl font-extrabold text-center mb-10 text-amber-800">Detalles del Proyecto</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">El Producto 🥔🍌</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg">Nuestros Productos Estrella:</h4>
+                            <ul class="list-disc list-inside mt-2 text-md space-y-1">
+                                <li>Chips de Plátano Verde</li>
+                                <li>Chips de Papa</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Sabores 100% Nicas:</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold">Limón-Chile</span>
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold">Ajo-Mantequilla</span>
+                                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold">Maggi Mix</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-3">Proceso de Producción:</h4>
+                            <div class="flex items-center justify-between text-center text-xs sm:text-sm space-x-2">
+                                <div class="flex-1 flex flex-col items-center">
+                                    <div class="bg-amber-200 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">1</div>
+                                    <p class="mt-2 font-semibold">Cortar</p>
+                                </div>
+                                <div class="flex-1 h-1 bg-amber-300"></div>
+                                <div class="flex-1 flex flex-col items-center">
+                                    <div class="bg-amber-200 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">2</div>
+                                    <p class="mt-2 font-semibold">Freír/Hornear</p>
+                                </div>
+                                <div class="flex-1 h-1 bg-amber-300"></div>
+                                <div class="flex-1 flex flex-col items-center">
+                                    <div class="bg-amber-200 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">3</div>
+                                    <p class="mt-2 font-semibold">Sazonar</p>
+                                </div>
+                                 <div class="flex-1 h-1 bg-amber-300"></div>
+                                <div class="flex-1 flex flex-col items-center">
+                                    <div class="bg-amber-200 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">4</div>
+                                    <p class="mt-2 font-semibold">Empacar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">El Mercado 🎯</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg">Público Objetivo:</h4>
+                            <p class="mt-2 text-md">Estudiantes de secundaria y universitarios. La venta se enfoca en recreos y eventos escolares.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Estrategia de Marketing:</h4>
+                             <ul class="list-disc list-inside mt-2 text-md space-y-2">
+                                <li>Contenido viral en <span class="font-bold">TikTok (🕺)</span> e <span class="font-bold">Instagram (📸)</span>.</li>
+                                <li>Muestras gratuitas para generar expectativa.</li>
+                                <li>Etiquetas coloridas y un hashtag pegadizo: <span class="font-bold text-amber-600">#SnackBoom</span>.</li>
+                                <li>Reto de Sabor: <span class="font-bold text-amber-600">#ExplotaTuSnack</span>.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Precio Sugerido:</h4>
+                            <div class="mt-2 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                                <p class="font-extrabold text-2xl">C$10 – C$15</p>
+                                <p class="text-sm">Por bolsita de 25g. ¡Accesible para todos!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="equipo" class="mb-12 md:mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-amber-800">Análisis del Equipo</h2>
+                <p class="max-w-2xl mx-auto mt-2">Este proyecto fue un esfuerzo 100% colaborativo. Los siguientes gráficos visualizan la distribución del tiempo y las contribuciones de cada integrante, demostrando nuestro compromiso conjunto.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-amber-200">
+                    <h3 class="text-xl font-bold text-center mb-4">Tiempo Total por Integrante (min)</h3>
+                    <div class="chart-container">
+                        <canvas id="contribucionesChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-amber-200">
+                    <h3 class="text-xl font-bold text-center mb-4">Distribución de Tareas (min)</h3>
+                    <div class="chart-container">
+                        <canvas id="tareasChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pt-8 border-t border-amber-200">
+             <h2 class="text-4xl md:text-5xl font-extrabold text-amber-600">¡Pide tu muestra en el recreo!</h2>
+             <p class="text-2xl font-bold mt-2 text-amber-800 animate-pulse">#SnackBoom</p>
+             <div class="mt-8 text-amber-700">
+                <p class="font-bold">Firmas del Equipo:</p>
+                <p>Javier _____________________</p>
+                <p>Brandon _____________________</p>
+                <p>Chele Piña _____________________</p>
+             </div>
+        </footer>
+
+    </main>
+
+    <script>
+        const teamData = {
+            members: ['Javier', 'Brandon', 'Chele Piña'],
+            times: [110, 97, 78],
+            tasks: {
+                labels: ['Producción', 'Filmación', 'Edición', 'Diseño', 'Redacción'],
+                times: [90, 60, 60, 30, 45]
+            }
+        };
+
+        const ctxContribuciones = document.getElementById('contribucionesChart').getContext('2d');
+        new Chart(ctxContribuciones, {
+            type: 'bar',
+            data: {
+                labels: teamData.members,
+                datasets: [{
+                    label: 'Minutos Totales',
+                    data: teamData.times,
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.7)',  // amber-500
+                        'rgba(251, 191, 36, 0.7)', // amber-400
+                        'rgba(252, 211, 77, 0.7)'  // amber-300
+                    ],
+                    borderColor: [
+                        'rgba(217, 119, 6, 1)',   // amber-600
+                        'rgba(245, 158, 11, 1)',  // amber-500
+                        'rgba(251, 191, 36, 1)'   // amber-400
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 5,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Minutos'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.raw} minutos`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const ctxTareas = document.getElementById('tareasChart').getContext('2d');
+        new Chart(ctxTareas, {
+            type: 'doughnut',
+            data: {
+                labels: teamData.tasks.labels,
+                datasets: [{
+                    label: 'Minutos por Tarea',
+                    data: teamData.tasks.times,
+                    backgroundColor: [
+                        'rgba(234, 88, 12, 0.8)',   // orange-600
+                        'rgba(249, 115, 22, 0.8)',  // orange-500
+                        'rgba(253, 186, 116, 0.8)',// orange-300
+                        'rgba(217, 119, 6, 0.8)',   // amber-600
+                        'rgba(245, 158, 11, 0.8)'   // amber-500
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += `${context.parsed} minutos`;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
